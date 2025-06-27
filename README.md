@@ -29,4 +29,7 @@ This project provisions a simple infrastructure setup on Google Cloud Platform u
    terraform plan 
    terraform apply 
 
+## Jenkins
+docker build -t jenkins-with-terraform .
+docker run -d -p 9090:8080 -p 50000:50000 --name jenkins -v jenkins_home:/var/jenkins_home jenkins-with-terraform
 
