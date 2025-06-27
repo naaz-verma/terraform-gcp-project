@@ -31,5 +31,6 @@ This project provisions a simple infrastructure setup on Google Cloud Platform u
 
 ## Jenkins
 docker build -t jenkins-with-terraform .
-docker run -d -p 9090:8080 -p 50000:50000 --name jenkins -v jenkins_home:/var/jenkins_home jenkins-with-terraform
+docker run -d -p 9090:8080 -p 50000:50000 --name jenkins -v jenkins_home:/var/jenkins_home -v /C:/Users/ASUS/Desktop/projects/GCP_Project/terraform-gcp-project/terraform/credentials.json:/var/jenkins_home/workspace/terraform-gcp-demo/terraform/credentials.json jenkins-with-terraform
+
 
