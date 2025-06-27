@@ -15,6 +15,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir('terraform') {
+                    sh 'cp /tmp/credentials.json credentials.json'
                     sh 'terraform init'
                 }
             }
