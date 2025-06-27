@@ -27,11 +27,12 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 dir('terraform') {
+                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json"]) {
                     sh 'terraform plan -var-file=${TF_VAR_file}'
+                    }
                 }
             }
         }
-
         stage('Approve Apply?') {
             steps {
                 input message: 'Do you want to apply the changes?', ok: 'Yes, apply'
@@ -41,7 +42,9 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
+                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json"]) {
                     sh 'terraform apply -auto-approve -var-file=${TF_VAR_file}'
+                    }
                 }
             }
         }
