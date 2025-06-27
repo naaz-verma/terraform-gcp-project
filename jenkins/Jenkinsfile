@@ -12,27 +12,21 @@ pipeline {
             }
         }
 
-        stage('Terraform Init') {
+        stage('Terraform Init & Plan') {
             steps {
-                dir('terraform') {
-                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json"]) {
-                    sh 'cp /tmp/credentials.json credentials.json'
-                    sh 'terraform init'
+                withCredentials([file(credentialsId: 'gcp-creds', variable: 'GOOGLE_CREDENTIALS')]) {
+                    dir('terraform') {
+                        sh '''
+                            cp $GOOGLE_CREDENTIALS credentials.json
+                            terraform init
+                            terraform plan -var-file=${TF_VAR_file} -out=tfplan
+                            terraform show tfplan
+                        '''
                     }
                 }
             }
         }
 
-
-        stage('Terraform Plan') {
-            steps {
-                dir('terraform') {
-                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json"]) {
-                    sh 'terraform plan -var-file=${TF_VAR_file}'
-                    }
-                }
-            }
-        }
         stage('Approve Apply?') {
             steps {
                 input message: 'Do you want to apply the changes?', ok: 'Yes, apply'
@@ -41,9 +35,12 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                dir('terraform') {
-                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json"]) {
-                    sh 'terraform apply -auto-approve -var-file=${TF_VAR_file}'
+                withCredentials([file(credentialsId: 'gcp-creds', variable: 'GOOGLE_CREDENTIALS')]) {
+                    dir('terraform') {
+                        sh '''
+                            cp $GOOGLE_CREDENTIALS credentials.json
+                            terraform apply tfplan
+                        '''
                     }
                 }
             }
@@ -51,11 +48,11 @@ pipeline {
     }
 
     post {
-        success {
-            echo 'Terraform pipeline completed successfully!'
-        }
         failure {
             echo 'Pipeline failed!'
+        }
+        success {
+            echo 'Terraform pipeline completed successfully!'
         }
     }
 }
