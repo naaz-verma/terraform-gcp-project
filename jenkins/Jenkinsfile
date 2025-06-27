@@ -15,11 +15,14 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir('terraform') {
+                    withEnv(["GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json"]) {
                     sh 'cp /tmp/credentials.json credentials.json'
                     sh 'terraform init'
+                    }
                 }
             }
         }
+
 
         stage('Terraform Plan') {
             steps {
