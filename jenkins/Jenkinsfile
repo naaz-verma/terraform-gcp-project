@@ -28,14 +28,28 @@ pipeline {
                 }
             }
         }
+
+        stage('Approve Apply?') {
+            steps {
+                input message: 'Do you want to apply the changes?', ok: 'Yes, apply'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve -var-file=${TF_VAR_file}'
+                }
+            }
+        }
     }
 
     post {
+        success {
+            echo 'Terraform pipeline completed successfully!'
+        }
         failure {
             echo 'Pipeline failed!'
-        }
-        success {
-            echo 'Terraform plan completed successfully!'
         }
     }
 }

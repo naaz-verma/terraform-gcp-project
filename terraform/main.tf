@@ -1,3 +1,9 @@
+terraform {
+  backend "gcs" {
+    bucket = "demo-bucket-6bf0c651"
+    prefix = "jenkins/dev"
+  }
+}
 provider "google" {
   credentials = file("credentials.json")
   project     = var.project_id

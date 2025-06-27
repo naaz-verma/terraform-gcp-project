@@ -26,3 +26,8 @@ variable "vm_name" {
   type        = string
   default     = "demo-instance"
 }
+
+variable "service_account_email" {
+  description = "Email of the Terraform service account"
+  type        = string
+}
