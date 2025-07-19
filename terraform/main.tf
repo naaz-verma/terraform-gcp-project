@@ -37,3 +37,24 @@ resource "google_storage_bucket" "my_bucket" {
   location      = var.bucket_location
   force_destroy = true
 }
+
+resource "google_compute_instance" "my_vm" {
+  name         = var.vm_name
+  machine_type = "f1-micro"
+  zone         = var.zone
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+
+  network_interface {
+    network       = "default"
+    access_config {}
+  }
+
+  metadata = {
+    ssh-keys = "naaz:${file("~/.ssh/id_rsa.pub")}"
+  }
+}

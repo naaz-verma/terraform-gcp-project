@@ -54,6 +54,8 @@ docker build -t jenkins-with-terraform .
 ### jenkins container to use terraform and gcp account credentials.json 
 docker --% run -d -p 9090:8080 -p 50000:50000 --name jenkins -v jenkins_home:/var/jenkins_home -v C:\Users\ASUS\Desktop\projects\GCP_Project\terraform-gcp-project\terraform\credentials.json:/tmp/credentials.json jenkins-with-terraform
 
+http://localhost:9090/
+
 ### Jenkinfile pipeline to be able to use credentials.json 
 Go to Jenkins Dashboard → Manage Jenkins → Credentials → Global → Add Credentials Kind: Secret file File: Upload your credentials.json ID: gcp-creds (or any ID you'll refer to in the pipeline)
 
@@ -70,5 +72,10 @@ terraform-gcp-project/
 ├── jenkins/
 │   └── Jenkinsfile             
 ├── docker/
-│   └── Dockerfile                 
-└── README.md
+│   └── Dockerfile
+├── ansible/            → Ansible config to install & configure NGINX
+│   ├── inventory.ini
+│   ├── site.yml
+│   └── files/
+│       └── index.html
+└── README.md 
