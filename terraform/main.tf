@@ -12,6 +12,7 @@ provider "google" {
   zone        = var.zone
 }
 
+
 resource "random_id" "bucket_suffix" {
   byte_length = 4
 }
@@ -39,6 +40,6 @@ resource "google_compute_instance" "my_vm" {
   }
 
   metadata = {
-    ssh-keys = "naaz:${file("~/.ssh/id_rsa.pub")}"
-  }
+  ssh-keys = "naaz:${file("${path.module}/naaz.pub")}"
+}
 }
