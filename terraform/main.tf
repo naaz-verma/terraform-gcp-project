@@ -40,6 +40,7 @@ resource "google_compute_instance" "my_vm" {
   }
 
   metadata = {
-  ssh-keys = "naaz:${file("${path.module}/naaz.pub")}"
-}
+  ssh-keys = "naaz:${file("~/.ssh/id_rsa.pub")}"
+  }
+
 }
